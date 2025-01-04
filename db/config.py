@@ -1,7 +1,8 @@
+from pathlib import Path
 from dotenv import dotenv_values
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.engine.url import URL
-from sqlalchemy.orm import sessionmaker
+
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 def connect_to_base() -> URL:
