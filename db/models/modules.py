@@ -1,12 +1,4 @@
-from sqlalchemy.orm import declarative_base, declared_attr
-from sqlalchemy import (
-    Column,
-    String,
-    Integer,
-    Float,
-    ForeignKey,
-    DateTime,
-    CheckConstraint,
-)
+from sqlalchemy.orm import declarative_base
 
+# Base class for all ORM models
 BASE = declarative_base()
