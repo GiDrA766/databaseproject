@@ -21,7 +21,7 @@ class Order(BASE):
     order_pay_type: Mapped[str] = mapped_column(
         String,
         CheckConstraint(
-            "order_pay_type IN ('Cash', 'Card')", name="check_order_pay_type"
+            "order_pay_type IN ('cash', 'card')", name="check_order_pay_type"
         ),
         nullable=False,
     )

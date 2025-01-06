@@ -15,7 +15,3 @@ class Customer(BASE):
     customer_preferences: Mapped[str] = mapped_column(String(length=60))
     customer_age: Mapped[int] = mapped_column(Integer)
     customer_weight: Mapped[float] = mapped_column(Float)
-
-    @property
-    def id_(self):
-        return self._id_

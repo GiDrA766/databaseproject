@@ -5,6 +5,10 @@ from sqlalchemy.engine.url import URL
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+class Settings:
+    api_v1_prefix: str = "/api/v1"
+
+
 def connect_to_base() -> URL:
     config = dotenv_values()
     session_url = URL.create(

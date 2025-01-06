@@ -12,7 +12,11 @@ class Dish(BASE):
 
     _id_: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     dish_name: Mapped[str] = mapped_column(String(32), nullable=False)
-    car_calory: Mapped[int] = mapped_column(Integer)
+    dish_calory: Mapped[int] = mapped_column(Integer)
     dish_price: Mapped[float] = mapped_column(Float)
     dish_weight: Mapped[float] = mapped_column(Float)
     dish_category: Mapped[str] = mapped_column(String(32))
+
+    @property
+    def id_(self):
+        return self._id_
