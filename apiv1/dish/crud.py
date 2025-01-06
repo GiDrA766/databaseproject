@@ -44,6 +44,6 @@ async def update_dish(
     return dish
 
 
-async def delete_dish(session: AsyncSession, dish: Dish):
+async def delete_dish(session: AsyncSession, dish: Dish) -> None:
     await session.delete(dish)
     await session.commit()

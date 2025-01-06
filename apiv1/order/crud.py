@@ -1,7 +1,7 @@
 from sqlalchemy import select, Result
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from apiv1.order.schemas import OrderCreate
+from apiv1.order.schemas import OrderCreate, UpdateOrder
 from db.models import Order
 
 
@@ -25,3 +25,18 @@ async def creating_order(session: AsyncSession, order_in: OrderCreate) -> Order 
     await session.commit()
     await session.refresh(order)
     return order
+
+
+async def update_order(
+    session: AsyncSession, order: Order, order_update: UpdateOrder, partial=False
+) -> Order | None:
+    for name, value in order_update.model_dump(exclude_unset=partial).items():
+        setattr(order, name, value)
+    await session.commit()
+    await session.refresh(order)
+    return order
+
+
+async def delete_order(session: AsyncSession, order: Order) -> None:
+    await session.delete(order)
+    await session.commit()

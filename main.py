@@ -2,7 +2,7 @@ import asyncio
 from contextlib import asynccontextmanager
 from db.models import BASE, db_helper
 from fastapi import FastAPI, Path
-from db.config import Settings
+from db.config import settings
 from crud.item_interacting import read_router
 from apiv1 import router as router_v1
 import uvicorn
@@ -22,7 +22,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(read_router, tags=["reading"])
-app.include_router(router_v1, prefix=Settings.api_v1_prefix)
+app.include_router(router_v1, prefix=settings.api_v1_prefix)
 
 
 @app.get("/")

@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette import status
+from starlette.status import HTTP_204_NO_CONTENT
 
 from apiv1.order.crud import get_all_orders, creating_order
-from apiv1.order.schemas import Order, OrderCreate
+from apiv1.order.schemas import Order, OrderCreate, UpdateOrder
 from db.models import db_helper
 
 router = APIRouter(tags=["Order"])
@@ -11,7 +13,7 @@ router = APIRouter(tags=["Order"])
 @router.get("/", response_model=list[Order])
 async def get_orders(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
-):
+) -> list[Order]:
     dishes = await get_all_orders(session=session)
     return dishes
 
@@ -31,5 +33,41 @@ async def get_order(
 async def create_order(
     order_in: OrderCreate,
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
-):
+) -> Order:
     return await creating_order(session=session, order_in=order_in)
+
+
+@router.put("/{order_id}/", response_model=Order)
+async def update_order(
+    order_update: UpdateOrder,
+    order: Order = Depends(get_order),
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+) -> Order:
+    return await update_order(
+        session=session,
+        order=order,
+        order_update=order_update,
+    )
+
+
+@router.patch("/{order_id}/", response_model=Order)
+async def partial_update_order(
+    order_update: UpdateOrder,
+    order: Order = Depends(get_order),
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+):
+    return await update_order(
+        session=session,
+        order=order,
+        order_update=order_update,
+        partial=True,
+    )
+
+
+@router.delete("/{order_id}/", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_order(
+    order: Order = Depends(get_order),
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+) -> None:
+    await delete_order(session=session, order=order)
+    return None

@@ -9,6 +9,9 @@ class Settings:
     api_v1_prefix: str = "/api/v1"
 
 
+settings = Settings()
+
+
 def connect_to_base() -> URL:
     config = dotenv_values()
     session_url = URL.create(
