@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, Float, String
+from sqlalchemy import Integer, Float, String, Index
 from sqlalchemy.orm import declared_attr, Mapped, mapped_column, relationship
 
 from db.models import BASE
@@ -21,3 +21,11 @@ class Customer(BASE):
     customer_weight: Mapped[float] = mapped_column(Float)
 
     orders: Mapped[list["Order"]] = relationship("Order", back_populates="customer")
+
+    __table_args__ = (
+        Index(
+            "idx_hash_customer_fullname",  # The name of the index
+            "customer_fullname",  # Column to index
+            postgresql_using="hash",  # Specify hash index type for PostgreSQL
+        ),
+    )
