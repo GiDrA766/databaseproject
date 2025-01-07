@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.engine.url import URL
 from db.config import connect_to_base
+from typing import AsyncGenerator
 
 
 class DataBaseHelper:
@@ -25,8 +26,6 @@ class DataBaseHelper:
         async with self.session_factory() as session:
             yield session
             await session.close()
-
-    from typing import AsyncGenerator
 
     async def scoped_session_dependency(self) -> AsyncGenerator[AsyncSession, None]:
         session = await self.get_scoped_session()
