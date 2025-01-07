@@ -10,14 +10,15 @@ import uvicorn
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    try:
-        async with db_helper.engine.begin() as conn:
-            await conn.run_sync(BASE.metadata.create_all)
-        yield
-    except Exception as e:
-        # Log the exception or gracefully handle it
-        print(f"Error during startup: {e}")
-        raise
+    # try:
+    #     async with db_helper.engine.begin() as conn:
+    #         await conn.run_sync(BASE.metadata.create_all)
+    #     yield
+    # except Exception as e:
+    #     # Log the exception or gracefully handle it
+    #     print(f"Error during startup: {e}")
+    #     raise
+    pass
 
 
 app = FastAPI(lifespan=lifespan)
