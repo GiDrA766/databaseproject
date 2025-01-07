@@ -1,7 +1,11 @@
 from sqlalchemy import Integer, String, Float
-from sqlalchemy.orm import declared_attr, Mapped, mapped_column
+from sqlalchemy.orm import declared_attr, Mapped, mapped_column, relationship
 
 from db.models.modules import BASE
+from typing import TYPE_CHECKING, List
+
+if TYPE_CHECKING:
+    from db.models import Order
 
 
 class Dish(BASE):
@@ -17,6 +21,4 @@ class Dish(BASE):
     dish_weight: Mapped[float] = mapped_column(Float)
     dish_category: Mapped[str] = mapped_column(String(32))
 
-    @property
-    def id_(self):
-        return self._id_
+    orders: Mapped[List["Order"]] = relationship("Order", back_populates="dish")

@@ -1,6 +1,6 @@
 from sqlalchemy import ForeignKey, Integer, DateTime, CheckConstraint, String
-from sqlalchemy.orm import declared_attr, Mapped, mapped_column
-
+from sqlalchemy.orm import declared_attr, Mapped, mapped_column, relationship
+from typing import TYPE_CHECKING
 from db.models import BASE, Dish, Customer
 
 
@@ -25,3 +25,6 @@ class Order(BASE):
         ),
         nullable=False,
     )
+
+    customer: Mapped["Customer"] = relationship("Customer", back_populates="orders")
+    dish: Mapped["Dish"] = relationship("Dish", back_populates="orders")
