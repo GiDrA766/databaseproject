@@ -18,7 +18,7 @@ async def lifespan(app: FastAPI):
     #     # Log the exception or gracefully handle it
     #     print(f"Error during startup: {e}")
     #     raise
-    pass
+    yield
 
 
 app = FastAPI(lifespan=lifespan)
