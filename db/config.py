@@ -7,6 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 class Settings:
     api_v1_prefix: str = "/api/v1"
+    requests_prefix: str = "/requests"
 
 
 settings = Settings()
