@@ -1,8 +1,10 @@
-from typing import List
+from fastapi import HTTPException
+from typing import List, Optional
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
+from starlette.status import HTTP_404_NOT_FOUND
 
 from db.models import Customer
 
@@ -21,10 +23,16 @@ async def get_customer_by_attributes(
 
 async def get_customer_with_his_orders(
     customer_id: int, session: AsyncSession
-) -> Customer | None:
+) -> Optional[Customer]:
     result = await session.execute(
         select(Customer)
         .options(selectinload(Customer.orders))  # Eager load orders
         .where(Customer._id_ == customer_id)
     )
-    return result.scalars().first()
+    customer = result.scalar_one_or_none()
+    if customer:
+        return customer
+    raise HTTPException(
+        status_code=HTTP_404_NOT_FOUND,
+        detail=f"Customer with id {customer_id} not found",
+    )

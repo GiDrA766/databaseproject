@@ -1,7 +1,8 @@
+from typing import Optional
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
-from starlette.status import HTTP_204_NO_CONTENT
 
 from apiv1.order.crud import get_all_orders, creating_order
 from apiv1.order.schemas import Order, OrderCreate, UpdateOrder
@@ -18,11 +19,11 @@ async def get_orders(
     return dishes
 
 
-@router.get("/{order_id}/", response_model=Order | None)
+@router.get("/{order_id}/", response_model=Optional[Order])
 async def get_order(
     order_id: int,
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
-) -> Order | None:
+) -> Optional[Order]:
     order = await get_order(session=session, order_id=order_id)
     if order:
         return order
