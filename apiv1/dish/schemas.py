@@ -1,4 +1,7 @@
+from __future__ import annotations
 from pydantic import BaseModel, Field, ConfigDict
+
+from apiv1.order.schemas import OrderWithCustomerAndDish
 
 
 class DishBase(BaseModel):
@@ -28,3 +31,14 @@ class PartialUpdateDish(DishCreate):
 class Dish(DishBase):
     dish_id: int = Field(alias="_id_")
     model_config = ConfigDict(from_attributes=True)
+
+
+class DishWithOrder(Dish):
+    orders: list["Order"] = None
+
+
+class DishWithOrderAndCustomer(Dish):
+    orders: list["OrderWithCustomer"] = None
+
+
+from apiv1.order.schemas import Order, OrderWithCustomer

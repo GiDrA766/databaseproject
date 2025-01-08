@@ -1,3 +1,7 @@
+from __future__ import annotations  # Enable forward references
+
+from typing import Optional, List
+
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -28,3 +32,14 @@ class PartialUpdateCustomer(CreateCustomer):
 class Customer(CustomerBase):
     model_config = ConfigDict(from_attributes=True)
     customer_id: int = Field(alias="_id_")
+
+
+class CustomerWithOrders(Customer):
+    orders: List["Order"] = None
+
+
+class CustomerWithOrdersAndDish(Customer):
+    orders: List["OrderWithDish"] = None
+
+
+from apiv1.order.schemas import Order, OrderWithDish  # Delayed import
