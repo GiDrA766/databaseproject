@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
+from apiv1 import order
 from apiv1.order.crud import get_all_orders, creating_order
 from apiv1.order.schemas import Order, OrderCreate, UpdateOrder
 from db.models import db_helper
