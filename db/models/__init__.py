@@ -16,3 +16,4 @@ from .customer import Customer
 
 from .Order import Order
 from .db_helper import DataBaseHelper, db_helper
+from .Json import JsonTable

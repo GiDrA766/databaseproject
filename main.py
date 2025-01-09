@@ -1,12 +1,11 @@
-import asyncio
 from contextlib import asynccontextmanager
-from db.models import BASE, db_helper
-from fastapi import FastAPI, Path
+from fastapi import FastAPI
 from db.config import settings
 from crud.item_interacting import read_router
 from apiv1 import router as router_v1
 from requests import router
 import uvicorn
+from optional import router as router_optional
 
 
 @asynccontextmanager
@@ -27,6 +26,7 @@ app.include_router(read_router, tags=["reading"])
 app.include_router(router_v1, prefix=settings.api_v1_prefix)
 
 app.include_router(router, prefix=settings.requests_prefix)
+app.include_router(router_optional)
 
 
 @app.get("/")
