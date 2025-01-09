@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:latest # Use your preferred database image (e.g., mysql, mariadb, etc.)
+    container_name: database_container
+    ports:
+      - "${BASE_PORT}:5432" # Maps external port defined in your .env file to the standard PostgreSQL internal port 5432
+    environment:
+      POSTGRES_USER: ${BASE_USER}      # Uses BASE_USER from .env
+      POSTGRES_PASSWORD: ${BASE_PASSWORD} # Uses BASE_PASSWORD from .env
+      POSTGRES_DB: ${BASE_DB}          # Uses BASE_DB from .env
+    volumes:
+      - db_data:/var/lib/postgresql/data # Persists database data
+
+volumes:
+  db_data:
