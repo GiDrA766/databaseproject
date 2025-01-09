@@ -14,8 +14,10 @@ router = APIRouter(tags=["Dish"])
 @router.get("/", response_model=list[Dish])
 async def get_all_dishes(
     session: AsyncSession = Depends(db_helper.session_dependency),
+    limit: int = 10,
+    offset: int = 0,
 ) -> list[Dish]:
-    dishes = await get_dishes(session=session)
+    dishes = await get_dishes(session=session, offset=offset, limit=limit)
     return dishes
 
 

@@ -5,22 +5,31 @@ update
 delete
 """
 
+from typing import Optional
+
 from sqlalchemy import select
 from sqlalchemy.engine import Result
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 from db.models import Customer
-from .schemas import CreateCustomer, UpdateCustomer, PartialUpdateCustomer
+from .schemas import CreateCustomer, PartialUpdateCustomer
 
 
-async def get_customers(session: AsyncSession) -> list[Customer]:
-    stmt = select(Customer).order_by(Customer._id_)
+async def get_customers(
+    session: AsyncSession, offset: int = 0, limit: int = 10
+) -> list[Customer]:
+    stmt = (
+        select(Customer)
+        .order_by(Customer._id_)
+        .offset(offset=offset)
+        .limit(limit=limit)
+    )
     result: Result = await session.execute(stmt)
     products = result.scalars().all()
     return list(products)
 
 
-async def get_customer(session: AsyncSession, customer_id: int) -> Customer | None:
+async def get_customer(session: AsyncSession, customer_id: int) -> Optional[Customer]:
     try:
         return await session.get(Customer, customer_id)
     except SQLAlchemyError:
@@ -29,7 +38,7 @@ async def get_customer(session: AsyncSession, customer_id: int) -> Customer | No
 
 async def create_customer(
     session: AsyncSession, creating_customer: CreateCustomer
-) -> Customer | None:
+) -> Optional[Customer]:
     try:
         customer = Customer(**creating_customer.model_dump())
         session.add(customer)
@@ -43,9 +52,9 @@ async def create_customer(
 async def update_customer(
     session: AsyncSession,
     customer: Customer,
-    customer_update: UpdateCustomer,
+    customer_update: PartialUpdateCustomer,
     partial=False,
-) -> Customer | None:
+) -> Optional[Customer]:
     for name, value in customer_update.model_dump(exclude_unset=partial).items():
         setattr(customer, name, value)
     await session.commit()

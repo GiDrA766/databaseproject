@@ -6,8 +6,10 @@ from apiv1.dish.schemas import DishCreate, DishUpdate
 from db.models import Dish
 
 
-async def get_dishes(session: AsyncSession) -> list[Dish]:
-    stmt = select(Dish).order_by(Dish._id_)
+async def get_dishes(
+    session: AsyncSession, offset: int = 0, limit: int = 0
+) -> list[Dish]:
+    stmt = select(Dish).order_by(Dish._id_).offset(offset=offset).limit(limit=limit)
     result = await session.execute(stmt)
     dishes = result.scalars().all()
     return list(dishes)

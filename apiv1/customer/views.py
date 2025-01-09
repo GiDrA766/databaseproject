@@ -12,8 +12,10 @@ router = APIRouter(tags=["Customer"])
 @router.get("/", response_model=list[Customer])
 async def get_all_customers(
     session: AsyncSession = Depends(db_helper.session_dependency),
+    limit: int = 10,
+    offset: int = 0,
 ) -> list[Customer]:
-    return await crud.get_customers(session=session)
+    return await crud.get_customers(session=session, offset=offset, limit=limit)
 
 
 @router.get("/{customer_id}/", response_model=Customer)

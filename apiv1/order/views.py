@@ -15,8 +15,10 @@ router = APIRouter(tags=["Order"])
 @router.get("/", response_model=list[Order])
 async def get_orders(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+    limit: int = 10,
+    offset: int = 0,
 ) -> list[Order]:
-    dishes = await get_all_orders(session=session)
+    dishes = await get_all_orders(session=session, offset=offset, limit=limit)
     return dishes
 
 
